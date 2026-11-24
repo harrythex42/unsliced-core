@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from '@playwright/test';
 import { pageCostModel } from '../../packages/core/dist/index.js';
 import { analyzePdf, generatePdf } from '../../packages/playwright/dist/index.js';
-import { boxOverflow, sourceSections } from '../../packages/mcp/page-checks.mjs';
+import { boxOverflow, sourceSections } from '../page-checks.mjs';
 import { captureTables, inspectTables } from '../check-table-fragments.mjs';
 import { digest, prepareDocuments } from './documents.mjs';
 import { planPilotV2, seedV2 } from './pilot-v2.mjs';

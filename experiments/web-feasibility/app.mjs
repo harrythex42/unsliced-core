@@ -1,5 +1,5 @@
 import { Marked } from 'marked';
-import { prepareDocument } from '../../packages/mcp/document.mjs';
+import { prepareDocument } from './document.mjs';
 
 const $ = id => document.getElementById(id);
 const controls = $('web-controls'), editor = $('markdown'), font = $('font');

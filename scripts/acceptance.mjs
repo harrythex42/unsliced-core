@@ -4,7 +4,7 @@ import { mkdir, readdir, readFile, unlink, writeFile } from 'node:fs/promises';
 import { dirname, extname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from '@playwright/test';
-import { boxOverflow, sourceSections } from '../packages/mcp/page-checks.mjs';
+import { boxOverflow, sourceSections } from './page-checks.mjs';
 import { captureTables, inspectTables } from './check-table-fragments.mjs';
 import { pageCostModel } from '../packages/core/dist/index.js';
 import { generatePdf } from '../packages/playwright/dist/index.js';

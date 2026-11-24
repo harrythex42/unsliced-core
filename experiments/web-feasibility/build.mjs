@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { createRequire } from 'node:module';
+import { build } from 'esbuild';
 import { fileURLToPath } from 'node:url';
 import { copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import { dirname, extname, join } from 'node:path';
@@ -8,9 +8,6 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../..');
 const dist = join(here, 'dist');
 const python = process.env.UNSLICED_PYTHON || 'python3';
-const require = createRequire(import.meta.url);
-const { build } = createRequire(require.resolve('tsup'))('esbuild');
-const mcpRequire = createRequire(join(root, 'packages/mcp/document.mjs'));
 await mkdir(dist, { recursive: true });
 if (!process.argv.includes('--reuse-fonts')) {
   execFileSync(python, [join(here, 'subset_font.py'), join(dist, 'fonts')], { stdio: 'inherit' });
@@ -33,7 +30,6 @@ for (const name of names.filter(name => extname(name) === '.md')) {
 await writeFile(join(dist, 'samples.json'), JSON.stringify(names));
 await build({
   entryPoints: [join(here, 'app.mjs')],
-  alias: { marked: mcpRequire.resolve('marked') },
   outfile: join(dist, 'app.js'), bundle: true, platform: 'browser', format: 'esm',
   banner: { js: '/*! BreakFlow and Unsliced contributors — MIT; see LICENSE. */' }
 });

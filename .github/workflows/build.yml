@@ -53,24 +53,8 @@ jobs:
     - name: Install PDF inspection tools
       run: python -m pip install -r scripts/requirements.txt
 
-    - name: Install Linux browser system libraries
-      if: runner.os == 'Linux'
-      run: pnpm exec playwright install-deps chromium
-
-    - name: Pack standalone npm package
-      run: node scripts/pack-mcp.mjs
-
-    - name: Install package outside the workspace
-      shell: bash
-      run: |
-        version=$(node -p "require('./packages/mcp/package.json').version")
-        npm install --prefix "$RUNNER_TEMP/unsliced-pack-test" "./output/npm/unsliced-pdf-mcp-$version.tgz"
-
-    - name: Run packed MCP PDF acceptance with first browser download
-      run: pnpm test:mcp
-      env:
-        UNSLICED_USE_BUNDLED_BROWSER: '1'
-        UNSLICED_TEST_MCP_ENTRY: ${{ runner.temp }}/unsliced-pack-test/node_modules/unsliced-pdf-mcp/dist/server.mjs
+    - name: Install Chromium
+      run: pnpm exec playwright install --with-deps chromium
 
     - name: Run browser tests
       run: pnpm test:browser

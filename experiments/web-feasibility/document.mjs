@@ -50,23 +50,3 @@ export function prepareDocument({ markdown: source, html }) {
   return '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><style>body{margin:0}img{max-width:100%}' + (source === undefined ? '' : markdownStyles) +
     '</style></head><body>' + body + '</body></html>';
 }
-
-export function contentWarning({ markdown: source, html }) {
-  // A fragment may end with a heading, table, list or code block. Only use
-  // strong signals here, since a complete last sentence need not end in punctuation.
-  const markdownTokens = source === undefined ? [] : markdown.lexer(source).filter(token => token.type !== 'space');
-  const last = markdownTokens.at(-1);
-  const fence = last?.type === 'code' && last.raw.match(/^ {0,3}(`{3,}|~{3,})/u);
-  const unclosedFence = fence && !last.raw.trimEnd().split(/\r?\n/u).slice(1)
-    .some(line => new RegExp('^ {0,3}' + fence[1][0] + '{' + fence[1].length + ',}\\s*$','u').test(line));
-  const incompleteDocument = html && (/<html(?:\s|>)/iu.test(html) && !/<\/html\s*>\s*$/iu.test(html) ||
-    /<[^<>]*$/u.test(html));
-  const tail = source === undefined
-    ? sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} }).trimEnd()
-    : last?.type === 'paragraph' ? last.text.trimEnd() : '';
-  const unfinishedSentence = /[、，；：,:;]$|(?:因为|所以|但是|以及|例如|包括|如果|由于|同时|并且|认为|需要)$|\b(?:and|or|because|including|which|such as|due to)$/iu.test(tail);
-  const omittedContent = /(?:\[.*(?:truncated|omitted).*\]|[（(](?:下文|以下|后续|其余)?(?:内容)?(?:省略|略去)[）)])$/iu.test(tail);
-  return unclosedFence || incompleteDocument || unfinishedSentence || omittedContent
-    ? '内容结尾可能被截断。请核对原稿是否完整，再提交完整内容重新生成。'
-    : undefined;
-}

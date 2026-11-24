@@ -1,5 +1,5 @@
 {
-  "name": "unsliced-monorepo",
+  "name": "unsliced-core",
   "version": "0.1.2",
   "private": true,
   "type": "module",
@@ -9,7 +9,7 @@
     "test:unit": "vitest run",
     "test:browser": "playwright test",
     "acceptance": "turbo run build && node scripts/acceptance.mjs",
-    "test:mcp": "node packages/mcp/acceptance.mjs",
+    "engine:pack": "pnpm build && node scripts/pack-engine.mjs",
     "review:prepare": "turbo run build && node scripts/review/prepare.mjs",
     "review": "node scripts/review/server.mjs",
     "typecheck": "turbo run typecheck",
@@ -19,8 +19,11 @@
   "devDependencies": {
     "@playwright/test": "^1.49.0",
     "@types/node": "^22.10.2",
+    "esbuild": "0.27.7",
     "eslint": "^9.17.0",
+    "marked": "16.4.2",
     "prettier": "^3.4.2",
+    "sanitize-html": "2.18.2",
     "tsup": "^8.3.5",
     "turbo": "^2.3.3",
     "typescript": "^5.7.2",
